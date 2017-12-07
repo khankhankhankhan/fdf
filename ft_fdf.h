@@ -38,5 +38,9 @@ char	*ft_dequeue(t_queue *queue);
 char	*ft_queue_peek(t_queue *queue);
 int		ft_queue_isEmpty(t_queue *queue);
 
-char **ft_read_file(char *file);
+char **ft_read_file(char *file, int *l);
+void ft_draw(char **new_file, int l);
+int **ft_strtoint(char **str, int l, int *x, int *y);
+void ft_display(int **res, int x, int y, void *mlx, void *win);
+void ft_draw_line(int *a, int *b, void *mlx, void *win);
 #endif

@@ -14,6 +14,7 @@
 int			main(int ac, char **av)
 {
 	char **new_file;
+	int l;
 
 	if (ac != 2)
   {
@@ -21,7 +22,7 @@ int			main(int ac, char **av)
 		return (0);
   }
 
-	new_file = ft_read_file(av[1]);
-
+	new_file = ft_read_file(av[1], &l);
+	ft_draw(new_file, l);
 	return (0);
 }

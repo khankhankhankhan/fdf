@@ -12,16 +12,17 @@
 
 #include "ft_fdf.h"
 
-char **ft_read_file(char *file)
+char **ft_read_file(char *file, int *l)
 {
 	int		fd;
 	t_queue	*que;
-	int		index;
 	char *line;
 	char	**new_file;
-
+	//char  **test;
+	char *temp_line;
+	//t_node *temp;
 	fd = 0;
-	index = 0;
+	*l = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (0);
@@ -30,21 +31,19 @@ char **ft_read_file(char *file)
 
 	while (get_next_line(fd, &line) == 1)
 	{
-
-		ft_enqueue(que, line);
-		printf("%s   point= %p\n", que->last->content,que->last->content);
-		index++;
+		temp_line = ft_strnew(1);
+		temp_line = ft_strjoin(temp_line, line);
+		ft_enqueue(que, temp_line);
+		(*l)++;
 	}
-	new_file = (char**)malloc(sizeof(char*) + (index + 1));
+	new_file = (char**)malloc(sizeof(char*) + (*l));
 	int i;
 	i = 0;
-	printf("\n");
-	while (i < index)
+	while (i < *l)
 	{
-		new_file[i] = ft_strnew(1);
-		printf("%s   point= %p\n", que->first->content,que->first->content);
+
 		new_file[i] = ft_dequeue(que);
-		//printf("%s\n", new_file[i]);
+		printf("%s   temp\n", new_file[i]);
 		i++;
 	}
 	close(fd);
