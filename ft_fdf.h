@@ -14,11 +14,11 @@
 # define FT_FDF_H
 
 # include "libft/libft.h"
-# include "get_next_line.h"
+//# include "get_next_line.h"
 # include "minilibx_macos/mlx.h"
 # include <fcntl.h>
 # include <stdio.h>
-
+# define BUFF_SIZE 20
 typedef struct s_node
 {
 	char *content;
