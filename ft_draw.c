@@ -21,9 +21,9 @@ void ft_draw(char **new_file, int l)
   int **res;
 
   mlx = mlx_init();
-  win = mlx_new_window(mlx, 400, 400, "title");
+  win = mlx_new_window(mlx, 800, 800, "mlx 42");
   res = ft_strtoint(new_file, l, &x, &y);
-  ft_display(res, x, y, mlx,win);
+  ft_display(res, x, y, mlx, win);
   mlx_loop(mlx);
 }
 
@@ -32,54 +32,57 @@ void ft_display(int **res, int x, int y, void *mlx, void *win)
   int i;
   int j;
 
-
   i = 0;
   j = 0;
   int **cur;
   int temp[3];
-  mlx = 0;
-  win = 0;
 
   cur = (int**)malloc(sizeof(int*) * y);
-  temp[0] = 150;
-  temp[1] = 50;
-  temp[2] = 0;
   cur[0] = (int*)malloc(sizeof(int) * 2);
-  cur[0][0] = 150;
-  cur[0][1] = 50;
+  cur[0][0] = 300;
+  cur[0][1] = 500;
+  cur[0][2] = 0;
+  temp[2] = 0;
   i = 1;
+  printf("cur[00]=%d cur[01] = %d\n", cur[0][0],cur[0][1]);
   while(i < y)
   {
     cur[i] = (int*)malloc(sizeof(int) * 2);
-    cur[i][0] = temp[0] - i * 6 - res[0][i];
-    cur[i][1] = temp[1] + i * 8 - res[0][i];
-    printf("(%d,%d),",cur[i][0],cur[i][1]);
-    //ft_draw_line(temp, cur[i], mlx,win);
-    temp[2] = res[0][i];
-    temp[0] = cur[i][0];
-    temp[1] = cur[i][1];
+    temp[2] = res[0][i - 1];
+    temp[0] = cur[i - 1][0] + 8 + res[0][i] - temp[2];
+    temp[1] = cur[i - 1][1] + 12 + res[0][i] - temp[2];
+
+    ft_draw_line(cur[i - 1], temp, mlx,win);
+    cur[i][0] = temp[0];
+    cur[i][1] = temp[1];
+    printf("cur[%d][0]=%d cur[%d][1] = %d\n", i,cur[i][0],i,cur[i][1]);
     i++;
   }
-
+  //mlx_loop(mlx);
+  printf("cur[00]=%d cur[01] = %d\n", cur[0][0],cur[0][1]);
   j = 1;
-  while(j < y)
+  while(j < x)
   {
-    temp[0] = cur[0][0];
-    temp[1] = cur[0][1];
-    cur[0][0] = temp[0] - j * 6 - res[j][0];
-    cur[0][1] = temp[1] + j * 8 - res[j][0];
-    //ft_draw_line(temp, cur[0], mlx, win);
-    temp[2] = res[j][0];
+    i = 0;
+    temp[0] = cur[0][0] + 12 + res[0][j] - res[0][j - 1];
+    temp[1] = cur[0][1] - 8 + res[0][j] - res[0][j - 1];
+    printf("cur[%d][0]=%d cur[%d][1] = %d\n", i,cur[i][0],i,cur[i][1]);
+    printf("temp= {%d, %d}\n", temp[0],temp[1]);
+    ft_draw_line(cur[0],temp,mlx, win);
+    cur[0][0] = temp[0];
+    cur[0][1] = temp[1];
+    //mlx_loop(mlx);
+
     i = 1;
-    while(i < x)
+    while(i < y)
     {
-      temp[0] = cur[i][0];
-      temp[1] = cur[i][1];
-      temp[2] = res[j - 1][i];
-      cur[i][0] = temp[0] - i * 6 - res[0][i];
-      cur[i][1] = temp[1] + i * 8 - res[0][i];
-      //ft_draw_line(temp, cur[i], mlx,win);
-      //ft_draw_line(cur[i - 1], cur[i], mlx,win);
+      temp[2] = res[i - 1][j];
+      temp[0] = cur[i - 1][0] + 8 + (res[i][j] - temp[2]) / 10;
+      temp[1] = cur[i - 1][1] + 12 - (res[i][j] - temp[2]) * 20;
+      ft_draw_line(cur[i - 1], temp, mlx,win);
+      ft_draw_line(cur[i], temp, mlx,win);
+      cur[i][0] = temp[0];
+      cur[i][1] = temp[1];
       i++;
     }
     j++;
@@ -87,20 +90,33 @@ void ft_display(int **res, int x, int y, void *mlx, void *win)
 }
 void ft_draw_line(int *a, int *b, void *mlx, void *win)
 {
-  int k;
+  float k;
   int f;
+  int x;
+  int y;
+
+  x = a[0];
+  y = a[1];
+  //printf(" a = {%d,%d}, b = {%d,%d}\n",a[0], a[1], b[0],b[1]);
 
   f = 1;
-  k = (b[1] - a[1]) / (b[0] - a[0]);
-  if (b[1] > a[1])
+  if (b[1] == a[1])
+    k = 0;
+  else
+    k =  (float)(b[0] - a[0]) / (float)(b[1] - a[1]);
+  if (b[1] < a[1])
     f = -1;
-  mlx_pixel_put(mlx, win, a[0], a[1], 0x00ffffff);
-  while (a[1] != b[1])
+  printf("f = %d, k = %f, a = {%d,%d}, b = {%d,%d}\n",f, k, a[0], a[1], b[0],b[1]);
+  mlx_pixel_put(mlx, win, a[0], a[1], 0x00FFFFFF);
+
+  while (y != b[1])
   {
-    a[1] = a[1] + f;
-    a[0] = a[0] + k;
-    mlx_pixel_put(mlx, win, a[0], a[1], 0x00ffffff);
+    y = y + f;
+    x = (int)((float)a[0] + k * (float)(y - a[1]));
+    printf("f = %d, k = %f, a = {%d,%d}, b = {%d,%d}\n",f, k, x, y, b[0],b[1]);
+    mlx_pixel_put(mlx, win, x, y, 0x00FFFFFF);
   }
+
 }
 int **ft_strtoint(char **str, int l, int *x, int *y)
 {
@@ -113,7 +129,6 @@ int **ft_strtoint(char **str, int l, int *x, int *y)
   res = (int**)malloc(sizeof(int*) * l);
   while (*y < l)
   {
-    printf("%s\n",str[*y]);
     temp = ft_strsplit(str[*y], ' ');
     (*x) = 0;
     while (temp[*x])
@@ -123,10 +138,8 @@ int **ft_strtoint(char **str, int l, int *x, int *y)
     while (i < (*x))
     {
       res[*y][i] = ft_atoi(temp[i]);
-      printf("%d ", res[*y][i]);
       i++;
     }
-    printf("    res[%d]\n",*y);
     (*y)++;
   }
   return (res);

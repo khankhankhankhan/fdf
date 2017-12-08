@@ -15,37 +15,34 @@
 char **ft_read_file(char *file, int *l)
 {
 	int		fd;
-	t_queue	*que;
-	char *line;
-	char	**new_file;
-	//char  **test;
-	char *temp_line;
-	//t_node *temp;
+	char	buf[BUFF_SIZE + 1];
+	int		rd;
+	char *temp;
+	char *temp2;
+	char **newfile;
 	fd = 0;
 	*l = 0;
 	fd = open(file, O_RDONLY);
-	if (fd < 0)
-		return (0);
-	que = ft_queue_init();
-	line = ft_strnew(1);
-
-	while (get_next_line(fd, &line) == 1)
+	rd = read(fd, buf, BUFF_SIZE);
+	temp = ft_strnew(BUFF_SIZE);
+	temp = ft_strncpy(temp, buf, BUFF_SIZE);
+	printf("%s\n",temp);
+	while(rd > 0)
 	{
-		temp_line = ft_strnew(1);
-		temp_line = ft_strjoin(temp_line, line);
-		ft_enqueue(que, temp_line);
+		temp2 = temp;
+		ft_bzero(buf, BUFF_SIZE + 1);
+		rd = read(fd, buf, BUFF_SIZE);
+		temp = ft_strjoin(temp, buf);
+		free(temp2);
+	}
+	newfile = ft_strsplit(temp, '\n');
+	*l = 0;
+	while (newfile[*l])
+	{
+		printf("%s   temp\n", newfile[*l]);
 		(*l)++;
 	}
-	new_file = (char**)malloc(sizeof(char*) + (*l));
-	int i;
-	i = 0;
-	while (i < *l)
-	{
-
-		new_file[i] = ft_dequeue(que);
-		printf("%s   temp\n", new_file[i]);
-		i++;
-	}
+	printf("len = %d\n", *l);
 	close(fd);
-	return (new_file);
+	return (newfile);
 }
