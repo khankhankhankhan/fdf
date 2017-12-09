@@ -13,9 +13,9 @@
 SRC_PATH = ./
 
 SRC_NAME = main.c\
-					get_next_line.c\
 					ft_read_file.c\
-					ft_queue.c
+					ft_draw.c\
+					get_map.c
 
 RC = $(addprefix $(SRC_PATH), $(SRC_NAME))
 

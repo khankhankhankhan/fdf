@@ -12,7 +12,7 @@
 
 #include "ft_fdf.h"
 
-char **ft_read_file(char *file, int *l)
+char **ft_read_file(char *file)
 {
 	int		fd;
 	char	buf[BUFF_SIZE + 1];
@@ -20,13 +20,12 @@ char **ft_read_file(char *file, int *l)
 	char *temp;
 	char *temp2;
 	char **newfile;
+
 	fd = 0;
-	*l = 0;
 	fd = open(file, O_RDONLY);
 	rd = read(fd, buf, BUFF_SIZE);
 	temp = ft_strnew(BUFF_SIZE);
 	temp = ft_strncpy(temp, buf, BUFF_SIZE);
-	printf("%s\n",temp);
 	while(rd > 0)
 	{
 		temp2 = temp;
@@ -36,13 +35,6 @@ char **ft_read_file(char *file, int *l)
 		free(temp2);
 	}
 	newfile = ft_strsplit(temp, '\n');
-	*l = 0;
-	while (newfile[*l])
-	{
-		printf("%s   temp\n", newfile[*l]);
-		(*l)++;
-	}
-	printf("len = %d\n", *l);
 	close(fd);
 	return (newfile);
 }
