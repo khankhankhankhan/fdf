@@ -44,5 +44,7 @@ int			main(int ac, char **av)
 	new_file = ft_read_file(av[1]);
 	map->title = ft_strjoin("FDF - ", av[1]);
 	ft_draw(new_file, map);
+	mlx_key_hook(map->win, ft_key_hook, map);
+	mlx_loop(map->mlx);
 	return (0);
 }

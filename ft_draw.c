@@ -14,16 +14,15 @@
 
 void ft_draw(char **new_file, t_map *map)
 {
-  int **res;
-  res = ft_strtoint(new_file, map);
+  ft_strtoint(new_file, map);
   ft_calc_map(map);
   map->mlx = mlx_init();
   map->win = mlx_new_window(map->mlx, map->width, map->hight, map->title);
-  ft_display(res, map);
-  mlx_loop(map->mlx);
+  ft_display(map);
+
 }
 
-void ft_display(int **res, t_map *map)
+void ft_display(t_map *map)
 {
   int i;
   int j;
@@ -35,9 +34,9 @@ void ft_display(int **res, t_map *map)
     while(i < map->x)
     {
       if(j > 0)
-        ft_draw_xline(res, i, j, map);
+        ft_draw_xline(map->res,i, j, map);
       if(i > 0)
-        ft_draw_yline(res, i, j, map);
+        ft_draw_yline(map->res, i, j, map);
       i++;
     }
     j++;
@@ -108,31 +107,29 @@ void ft_draw_line(int *a, int *b, t_map *map)
   }
 
 }
-int **ft_strtoint(char **str, t_map *map)
+void ft_strtoint(char **str, t_map *map)
 {
-  int **res;
   char **temp;
   int i;
 
   i = 0;
   while (str[i])
     i++;
-  res = (int**)malloc(sizeof(int*) * i);
+  map->res = (int**)malloc(sizeof(int*) * i);
   while (str[map->y])
   {
     temp = ft_strsplit(str[map->y], ' ');
     i = 0;
     while (temp[i])
       i++;
-    res[map->y] = (int*)malloc(sizeof(int) * (i));
+    map->res[map->y] = (int*)malloc(sizeof(int) * (i));
     map->x = 0;
     while (map->x < i)
     {
-      res[map->y][map->x] = ft_atoi(temp[map->x]);
-      get_min_max(res[map->y][map->x], map);
+      map->res[map->y][map->x] = ft_atoi(temp[map->x]);
+      get_min_max(map->res[map->y][map->x], map);
       (map->x)++;
     }
     (map->y)++;
   }
-  return (res);
 }
