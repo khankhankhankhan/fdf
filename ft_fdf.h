@@ -6,7 +6,7 @@
 /*   By: hkang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/06 11:50:13 by hkang             #+#    #+#             */
-/*   Updated: 2017/12/06 11:50:16 by hkang            ###   ########.fr       */
+/*   Updated: 2017/12/11 13:50:03 by hkang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define FT_FDF_H
 
 # include "libft/libft.h"
-//# include "get_next_line.h"
 # include "minilibx_macos/mlx.h"
 # include <fcntl.h>
 # include <stdio.h>
@@ -32,53 +31,50 @@
 # define KEY_RIGHT 124
 
 # define KEY_ZOOM_IN 31
-# define KEY_ZOOM_OUT 35
+# define KEY_ZOOM_OUT 34
 
-# define KEY_ROT_X_U 0
-# define KEY_ROT_X_D 1
-# define KEY_ROT_Y_U 2
-# define KEY_ROT_Y_D 12
-# define KEY_ROT_Z_U 13
-# define KEY_ROT_Z_D 14
-
-typedef struct s_map
+typedef struct	s_map
 {
-	void *mlx;
-	void *win;
-	char *title;
-	int  **res;
-	int  width;
-	int hight;
-	int offsetx;
-	int offsety;
-	int dx;
-	int dy;
-	int divid;
-	int multy;
-	int min_x;
-	int min_y;
-	int max_x;
-	int max_y;
-	int x;
-	int y;
-	int color;
+	void	*mlx;
+	void	*win;
+	char	*title;
+	int		**res;
+	int		width;
+	int		hight;
+	int		offsetx;
+	int		offsety;
+	int		dx;
+	int		dy;
+	int		divid;
+	int		multy;
+	int		min_x;
+	int		min_y;
+	int		max_x;
+	int		max_y;
+	int		x;
+	int		y;
+	int		color;
+	int		color_base;
+	int		dcolor;
+}				t_map;
 
-}       t_map;
+void			ft_map_init(t_map *map);
+void			ft_draw(char **new_file, t_map *map);
+void			ft_display(t_map *map);
+void			ft_draw_xline(int **res, int i, int j, t_map *map);
+void			ft_draw_yline(int **res, int i, int j, t_map *map);
+void			ft_draw_line(int *a, int *b, t_map *map);
+void			ft_draw_slope(int *a, int *b, t_map *map);
+void			ft_draw_horizon(int *a, int *b, t_map *map);
+void			ft_draw_vertical(int *a, int *b, t_map *map);
 
+void			ft_strtoint(char **str, t_map *map);
+void			get_min_max(int n, t_map *map);
+void			ft_calc_map(t_map *map);
+char			**ft_read_file(char *file);
 
-void ft_map_init(t_map *map);
-void ft_draw(char **new_file, t_map *map);
-void ft_display(t_map *map);
-void ft_draw_xline(int **res, int i, int j, t_map *map);
-void ft_draw_yline(int **res, int i, int j, t_map *map);
-void ft_draw_line(int *a, int *b, t_map *map);
-void ft_strtoint(char **str, t_map *map);
-void get_min_max(int n, t_map *map);
-void ft_calc_map(t_map *map);
-char **ft_read_file(char *file);
-
-int ft_key_hook(int keycode, t_map *map);
-void  ft_map_move(int keycode, t_map *map);
-void ft_map_zoom(int keycode, t_map *map);
-void ft_cal_zoom(t_map *map, int n);
+int				ft_key_hook(int keycode, t_map *map);
+void			ft_map_move(int keycode, t_map *map);
+void			ft_map_zoom(int keycode, t_map *map);
+void			ft_cal_zoom(t_map *map, int n);
 #endif

@@ -15,6 +15,7 @@ SRC_PATH = ./
 SRC_NAME = main.c\
 					ft_read_file.c\
 					ft_draw.c\
+					ft_draw_line.c\
 					get_map.c\
 					ft_hook.c
 
@@ -59,12 +60,11 @@ $(NAME) : $(LIB_NAME) $(MLX_NAME) $(OBJ)
 
 $(OBJ_PATH)%.o : $(SRC_PATH)%.c
 	mkdir -p obj
-	$(CC) $(CFLAGS) $(INC) $(LIB) -o $@ -c $< -g
+	$(CC) $(CFLAGS) $(INC) -o $@ -c $<
 
 clean :
 	make -C $(LIB_PATH) clean
-	rm -fv $(OBJ)
-	rmdir $(OBJ_PATH) 2> /dev/null || echo "" > /dev/null
+	rm -rf obj
 
 fclean : clean
 	make -C $(LIB_PATH) fclean

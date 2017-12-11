@@ -6,35 +6,34 @@
 /*   By: hkang <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/06 14:12:08 by hkang             #+#    #+#             */
-/*   Updated: 2017/12/06 14:12:10 by hkang            ###   ########.fr       */
+/*   Updated: 2017/12/11 13:40:08 by hkang            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_fdf.h"
 
-char **ft_read_file(char *file)
+char	**ft_read_file(char *file)
 {
-	int		fd;
+	int		fd[2];
 	char	buf[BUFF_SIZE + 1];
-	int		rd;
-	char *temp;
-	char *temp2;
-	char **newfile;
+	char	**temp;
+	char	**newfile;
 
-	fd = 0;
-	fd = open(file, O_RDONLY);
-	rd = read(fd, buf, BUFF_SIZE);
-	temp = ft_strnew(BUFF_SIZE);
-	temp = ft_strncpy(temp, buf, BUFF_SIZE);
-	while(rd > 0)
+	fd[0] = open(file, O_RDONLY);
+	fd[1] = read(fd[0], buf, BUFF_SIZE);
+	temp = (char**)malloc(sizeof(char*) * 2);
+	temp[0] = ft_strnew(BUFF_SIZE);
+	temp[0] = ft_strncpy(temp[0], buf, BUFF_SIZE);
+	while (fd[1] > 0)
 	{
-		temp2 = temp;
+		temp[1] = temp[0];
 		ft_bzero(buf, BUFF_SIZE + 1);
-		rd = read(fd, buf, BUFF_SIZE);
-		temp = ft_strjoin(temp, buf);
-		free(temp2);
+		fd[1] = read(fd[0], buf, BUFF_SIZE);
+		temp[0] = ft_strjoin(temp[0], buf);
+		free(temp[1]);
 	}
-	newfile = ft_strsplit(temp, '\n');
-	close(fd);
+	newfile = ft_strsplit(temp[0], '\n');
+	free(temp[0]);
+	close(fd[0]);
 	return (newfile);
 }
